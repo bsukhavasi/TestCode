@@ -1,0 +1,74 @@
+﻿@model EmployeeDirect.Models.EmployeeVM
+
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+
+@{
+    ViewBag.Title = "Edit Employee";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+<div class="container">
+    @{ if (Model.EditType == "W")
+        {
+            <h3>Edit Work Days</h3>
+        }
+        else if (Model.EditType == "Y")
+        {
+            <h3>Edit Vacation Days</h3>
+        }
+    }
+    <hr />
+    <div class="col-lg-10">
+        @using (Html.BeginForm("UpdateEmployee", "Employee"))
+        {
+            <div class="form-horizontal">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.EmployeeID, new { @id = "EmployeeID" })
+                @Html.HiddenFor(model => model.EditType, new { @id = "EditType" })
+                @{ if (Model.EditType == "W")
+                    {
+                        <div class="form-group">
+                            @Html.Label("Work Days", htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">
+                                @Html.TextBoxFor(model => model.WorkDays, null,
+                                                    new { @class = "form-control", id = "txtWorkDays", placeholder = "Enter Days", type = "number", @min = "0", @max = "299" })
+                                @Html.ValidationMessageFor(model => model.WorkDays, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    }
+                    else if (Model.EditType == "V")
+                    {
+                        <div class="form-group">
+                            @Html.Label("Vacation Days", htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">
+                                @Html.TextBoxFor(model => model.VacationTaken, null,
+                                                    new { @class = "form-control", placeholder = "Enter Days", type = "number", @min = "0", @max = "30" })
+                                @Html.ValidationMessageFor(model => model.VacationTaken, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    }
+                }
+
+                <div class="form-group ">
+                    <div class="col-md-offset-3 col-md-9">
+                        <button type="submit" Name="close" name="CloseEdit" class="btn btn-primary">Close</button>
+                        <button type="submit" value="Edit" name="Edit" class="btn btn-primary">Save</button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        
+        var message = @Html.Raw(Json.Encode(this.ViewBag.message));
+        if (message != null)
+            alert(message);
+
+        
+    });
+</script>
+
